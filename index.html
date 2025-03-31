@@ -34,9 +34,12 @@
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            Tesseract.recognize(canvas, 'eng', { logger: m => console.log(m) })
+            Tesseract.recognize(canvas, 'eng', {
+                logger: m => console.log(m),
+                tessedit_char_whitelist: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+            })
                 .then(({ data: { text } }) => {
-                    resultado.textContent = "Texto reconhecido: " + text;
+                    resultado.textContent = "Texto reconhecido: " + text.replace(/[^0-9A-Za-z]/g, '');
                 })
                 .catch(err => { console.error("Erro no OCR", err); });
         }
